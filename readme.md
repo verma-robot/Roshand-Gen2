@@ -36,7 +36,7 @@
 ## 校准触觉传感器
 
   ```
-  roslaunch roshand_gen2_driver bringup.launch 
+  rosservice call calibrate_sensor_service
 
   ```
 ## 运行一个demo
