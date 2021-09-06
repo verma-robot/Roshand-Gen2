@@ -7,9 +7,7 @@
  - roshand_gen2_visualizer : roshand gen2的URDF文件. 
  
 
-## 安装
-
-# 按照如下步骤安装、编译 :
+## 安装驱动
 
   ```
   cd ~/catkin_ws/src
@@ -18,7 +16,7 @@
   catkin_make
 
   ```
-# 修改 串口权限
+## 修改 串口权限
 
   ```
   sudo chmod 666 /dev/ttyUSB0  
@@ -30,4 +28,20 @@
   roslaunch roshand_gen2_driver bringup.launch 
 
   ```
-##
+## 查看主题
+
+  通过rostopic list和rosservice list查看主题和服务
+  
+  
+## 校准触觉传感器
+
+  ```
+  roslaunch roshand_gen2_driver bringup.launch 
+
+  ```
+## 运行一个demo
+
+  ```
+  rosrun roshand_gen2_demo demo
+
+  ```
