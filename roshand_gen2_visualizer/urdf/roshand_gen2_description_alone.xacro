@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<robot
+
+	xmlns:xacro="http://www.ros.org/wiki/xacro" name="roshand_robot">  
+        <xacro:include filename="$(find roshand_gen2_visualizer)/urdf/roshand_gen2_description.xacro"/>      
+        
+       <xacro:roshand  link_name="base_link"/>
+       
+
+</robot>

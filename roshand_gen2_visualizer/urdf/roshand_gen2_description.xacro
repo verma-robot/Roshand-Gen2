@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<root xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+  <xacro:include filename="$(find roshand_gen2_visualizer)/urdf/fingertips_sensor.xacro"/>      
+
+  <xacro:property name="left" value="left" />
+  <xacro:property name="right" value="right" />
+  <xacro:property name="sensor_number_1" value="1" />
+  <xacro:property name="sensor_number_2" value="2" />
+  <xacro:property name="sensor_number_3" value="3" />
+  <xacro:property name="sensor_number_4" value="4" />
+  <xacro:property name="sensor_number_5" value="5" />
+  <xacro:property name="sensor_number_6" value="6" />
+  <xacro:property name="sensor_number_7" value="7" />
+  <xacro:property name="sensor_number_8" value="8" />
+  <xacro:property name="sensor_number_9" value="9" />
+  <xacro:property name="sensor_number_10" value="10" />
+  <xacro:property name="sensor_number_11" value="11" />
+  <xacro:property name="sensor_number_12" value="12" />
+  <xacro:property name="sensor_number_13" value="13" />
+  <xacro:property name="sensor_number_14" value="14" />
+
+  <xacro:property name="sensor_1_origin_xyz" value="0.009 -0.039 -0.0065" />
+  <xacro:property name="sensor_1_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_2_origin_xyz" value="0.009 -0.0325 -0.0065" />
+  <xacro:property name="sensor_2_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_3_origin_xyz" value="0.009 -0.026 -0.0065" />
+  <xacro:property name="sensor_3_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_4_origin_xyz" value="0.009 -0.0195 -0.0065" />
+  <xacro:property name="sensor_4_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_5_origin_xyz" value="0.009 -0.013 -0.0065" />
+  <xacro:property name="sensor_5_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_6_origin_xyz" value="0.009 -0.039 0" />
+  <xacro:property name="sensor_6_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_7_origin_xyz" value="0.009 -0.0325 0" />
+  <xacro:property name="sensor_7_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_8_origin_xyz" value="0.009 -0.026 0" />
+  <xacro:property name="sensor_8_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_9_origin_xyz" value="0.009 -0.0195 0" />
+  <xacro:property name="sensor_9_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_10_origin_xyz" value="0.009 -0.039 0.0065" />
+  <xacro:property name="sensor_10_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_11_origin_xyz" value="0.009 -0.0325 0.0065" />
+  <xacro:property name="sensor_11_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_12_origin_xyz" value="0.009 -0.026 0.0065" />
+  <xacro:property name="sensor_12_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_13_origin_xyz" value="0.009 -0.0195 0.0065" />
+  <xacro:property name="sensor_13_origin_rpy" value="0 1.5708 0" />
+
+  <xacro:property name="sensor_14_origin_xyz" value="0.009 -0.013 0.0065" />
+  <xacro:property name="sensor_14_origin_rpy" value="0 1.5708 0" />
+
+
+  <xacro:arg name="robot_namespace" default="/" />  
+    <xacro:macro name="roshand" params="link_name">
+
+  <link
+    name="${link_name}">
+    <inertial>
+      <origin
+        xyz="-7.24454692577368E-05 3.85758796504559E-05 0.0397389562869855"
+        rpy="0 0 0" />
+      <mass
+        value="0.147706805974407" />
+      <inertia
+        ixx="0.000214387655837092"
+        ixy="-9.34886854592512E-08"
+        ixz="-2.68297253887287E-07"
+        iyy="0.000211309001109376"
+        iyz="1.94790791051413E-07"
+        izz="0.00012178129107456" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.411764705882353 0.411764705882353 0.411764705882353 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+ 
+  <link
+    name="left_outer_finger_link">
+    <inertial>
+      <origin
+        xyz="-0.021046 -0.010522 -5.8073E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.017127" />
+      <inertia
+        ixx="3.0358E-06"
+        ixy="-2.1931E-06"
+        ixz="-1.7852E-11"
+        iyy="5.7101E-06"
+        iyz="-9.1028E-12"
+        izz="6.5459E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/left_outer_finger_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.10196 0.10196 0.10196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/left_outer_finger_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_outer_finger_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.02849 0.092"
+      rpy="-1.5708 0 1.5708" />
+    <parent
+      link="${link_name}" />
+    <child
+      link="left_outer_finger_link" />
+    <axis
+      xyz="0 0 1" />
+    <mimic
+      joint="left_inner_finger_joint"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="left_inner_finger_link">
+    <inertial>
+      <origin
+        xyz="-0.016257 -0.017131 8.1417E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.012945" />
+      <inertia
+        ixx="2.2741E-06"
+        ixy="-1.5177E-06"
+        ixz="-6.1856E-09"
+        iyy="2.9258E-06"
+        iyz="6.3839E-10"
+        izz="3.51E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/left_inner_finger_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.10196 0.10196 0.10196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/left_inner_finger_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_inner_finger_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.016234 0.10228"
+      rpy="-1.5708 0 1.5708" />
+    <parent
+      link="${link_name}" />
+    <child
+      link="left_inner_finger_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="left_fingertips_link">
+    <inertial>
+      <origin
+        xyz="0.000733152385866978 -0.0188290721540955 -1.6681287004738E-09"
+        rpy="0 0 0" />
+      <mass
+        value="0.0125491940183716" />
+      <inertia
+        ixx="3.89274967756384E-06"
+        ixy="6.01983023784433E-07"
+        ixz="-1.2447932534107E-13"
+        iyy="9.51990957683098E-07"
+        iyz="3.42340621068824E-13"
+        izz="3.73152122520973E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/left_fingertips_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.101960784313725 0.101960784313725 0.101960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/left_fingertips_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_fingertips_joint"
+    type="continuous">
+    <origin
+      xyz="-0.037616 -0.03294 0"
+      rpy="0 0 0" />
+    <parent
+      link="left_inner_finger_link" />
+    <child
+      link="left_fingertips_link" />
+    <axis
+      xyz="0 0 1" />
+    <mimic
+      joint="left_inner_finger_joint"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+ 
+  <link
+    name="right_outer_finger_link">
+    <inertial>
+      <origin
+        xyz="-0.0210460418396685 -0.010521986740714 -5.80725534643393E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.0171272260085877" />
+      <inertia
+        ixx="3.03575872995731E-06"
+        ixy="-2.19306990176017E-06"
+        ixz="-1.78516320059534E-11"
+        iyy="5.71009188529195E-06"
+        iyz="-9.10278851736987E-12"
+        izz="6.54594063370788E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/right_outer_finger_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.101960784313725 0.101960784313725 0.101960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/right_outer_finger_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_outer_finger_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.02849 0.092"
+      rpy="-1.5708 0 -1.5708" />
+    <parent
+      link="${link_name}" />
+    <child
+      link="right_outer_finger_link" />
+    <axis
+      xyz="0 0 -1" />
+    <mimic
+      joint="left_inner_finger_joint"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+  <link
+    name="right_inner_finger_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/right_inner_finger_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.101960784313725 0.101960784313725 0.101960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/right_inner_finger_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="right_inner_finger_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.016234 0.10228"
+      rpy="-1.5708 0 -1.5708" />
+    <parent
+      link="${link_name}" />
+    <child
+      link="right_inner_finger_link" />
+    <axis
+      xyz="0 0 -1" />
+    <mimic
+      joint="left_inner_finger_joint"
+      multiplier="-1"
+      offset="0" />
+  </joint>
+
+
+
+
+  <link
+    name="right_fingertips_link">
+    <inertial>
+      <origin
+        xyz="0.000733152385866999 -0.0188290721540955 -1.66812952504934E-09"
+        rpy="0 0 0" />
+      <mass
+        value="0.0125491940183716" />
+      <inertia
+        ixx="3.89274967756383E-06"
+        ixy="6.01983023784437E-07"
+        ixz="-1.2447932388137E-13"
+        iyy="9.51990957683105E-07"
+        iyz="3.4234061823423E-13"
+        izz="3.73152122520973E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/right_fingertips_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.101960784313725 0.101960784313725 0.101960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roshand_gen2_visualizer/meshes/right_fingertips_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="right_fingertips_joint"
+    type="continuous">
+    <origin
+      xyz="-0.037616 -0.03294 0"
+      rpy="0 0 0" />
+    <parent
+      link="right_inner_finger_link" />
+    <child
+      link="right_fingertips_link" />
+    <axis
+      xyz="0 0 -1" />
+    <mimic
+      joint="left_inner_finger_joint"
+      multiplier="1"
+      offset="0" />
+  </joint>
+
+
+<xacro:finger_sensor prefix="left" sensor_number="1" joint_origin_xyz= "${sensor_1_origin_xyz}" joint_origin_rpy= "${sensor_1_origin_rpy}" />
+<xacro:finger_sensor prefix="left" sensor_number="2" joint_origin_xyz= "${sensor_2_origin_xyz}" joint_origin_rpy= "${sensor_2_origin_rpy}" />  
+<xacro:finger_sensor prefix="left" sensor_number="3" joint_origin_xyz= "${sensor_3_origin_xyz}" joint_origin_rpy= "${sensor_3_origin_rpy}" />  
+<xacro:finger_sensor prefix="left" sensor_number="4" joint_origin_xyz= "${sensor_4_origin_xyz}" joint_origin_rpy= "${sensor_4_origin_rpy}" />  
+<xacro:finger_sensor prefix="left" sensor_number="5" joint_origin_xyz= "${sensor_5_origin_xyz}" joint_origin_rpy= "${sensor_5_origin_rpy}" />  
+<xacro:finger_sensor prefix="left" sensor_number="6" joint_origin_xyz= "${sensor_6_origin_xyz}" joint_origin_rpy= "${sensor_6_origin_rpy}" />  
+<xacro:finger_sensor prefix="left" sensor_number="7" joint_origin_xyz= "${sensor_7_origin_xyz}" joint_origin_rpy= "${sensor_7_origin_rpy}" />
+<xacro:finger_sensor prefix="left" sensor_number="8" joint_origin_xyz= "${sensor_8_origin_xyz}" joint_origin_rpy= "${sensor_8_origin_rpy}" />  <xacro:finger_sensor prefix="left" sensor_number="9" joint_origin_xyz= "${sensor_9_origin_xyz}" joint_origin_rpy= "${sensor_9_origin_rpy}" />  <xacro:finger_sensor prefix="left" sensor_number="10" joint_origin_xyz= "${sensor_10_origin_xyz}" joint_origin_rpy= "${sensor_10_origin_rpy}" />  <xacro:finger_sensor prefix="left" sensor_number="11" joint_origin_xyz= "${sensor_11_origin_xyz}" joint_origin_rpy= "${sensor_11_origin_rpy}" />  
+<xacro:finger_sensor prefix="left" sensor_number="12" joint_origin_xyz= "${sensor_12_origin_xyz}" joint_origin_rpy= "${sensor_12_origin_rpy}" /> 
+<xacro:finger_sensor prefix="left" sensor_number="13" joint_origin_xyz= "${sensor_13_origin_xyz}" joint_origin_rpy= "${sensor_13_origin_rpy}" /> 
+<xacro:finger_sensor prefix="left" sensor_number="14" joint_origin_xyz= "${sensor_14_origin_xyz}" joint_origin_rpy= "${sensor_14_origin_rpy}" />  
+
+
+
+<xacro:finger_sensor prefix="right" sensor_number="1" joint_origin_xyz= "${sensor_1_origin_xyz}" joint_origin_rpy= "${sensor_1_origin_rpy}" />
+<xacro:finger_sensor prefix="right" sensor_number="2" joint_origin_xyz= "${sensor_2_origin_xyz}" joint_origin_rpy= "${sensor_2_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="3" joint_origin_xyz= "${sensor_3_origin_xyz}" joint_origin_rpy= "${sensor_3_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="4" joint_origin_xyz= "${sensor_4_origin_xyz}" joint_origin_rpy= "${sensor_4_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="5" joint_origin_xyz= "${sensor_5_origin_xyz}" joint_origin_rpy= "${sensor_5_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="6" joint_origin_xyz= "${sensor_6_origin_xyz}" joint_origin_rpy= "${sensor_6_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="7" joint_origin_xyz= "${sensor_7_origin_xyz}" joint_origin_rpy= "${sensor_7_origin_rpy}" />
+<xacro:finger_sensor prefix="right" sensor_number="8" joint_origin_xyz= "${sensor_8_origin_xyz}" joint_origin_rpy= "${sensor_8_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="9" joint_origin_xyz= "${sensor_9_origin_xyz}" joint_origin_rpy= "${sensor_9_origin_rpy}" /> 
+<xacro:finger_sensor prefix="right" sensor_number="10" joint_origin_xyz= "${sensor_10_origin_xyz}" joint_origin_rpy= "${sensor_10_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="11" joint_origin_xyz= "${sensor_11_origin_xyz}" joint_origin_rpy= "${sensor_11_origin_rpy}" />  
+<xacro:finger_sensor prefix="right" sensor_number="12" joint_origin_xyz= "${sensor_12_origin_xyz}" joint_origin_rpy= "${sensor_12_origin_rpy}" /> 
+ <xacro:finger_sensor prefix="right" sensor_number="13" joint_origin_xyz= "${sensor_13_origin_xyz}" joint_origin_rpy= "${sensor_13_origin_rpy}" /> 
+ <xacro:finger_sensor prefix="right" sensor_number="14" joint_origin_xyz= "${sensor_14_origin_xyz}" joint_origin_rpy= "${sensor_14_origin_rpy}" />  
+
+
+  <!--transmission name="left_inner_finger_joint_trans">
+	<type>transmission_interface/SimpleTransmission</type>
+	<actuator name="left_inner_finger_motor">
+		<mechanicalReduction>1</mechanicalReduction>
+		<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+	</actuator>
+	<joint name="left_inner_finger_joint">
+		<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+	</joint>
+  </transmission>
+
+
+
+    <gazebo>
+
+
+
+
+
+
+      <plugin name="left_outer_finger_joint_mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+        <joint>left_inner_finger_joint</joint>
+        <mimicJoint>left_outer_finger_joint</mimicJoint>
+      
+        <multiplier>-1</multiplier>
+        <offset>0</offset>
+        <sensitiveness>1</sensitiveness>  
+        <maxEffort>100</maxEffort>            
+          <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      </plugin>
+   
+
+
+  
+      <plugin name="right_fingertips_joint_mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+        <joint>left_inner_finger_joint</joint>
+
+        <mimicJoint>right_fingertips_joint</mimicJoint>
+        <multiplier>1</multiplier>
+        <offset>0</offset>
+        <sensitiveness>1</sensitiveness>  
+        <maxEffort>100</maxEffort>            
+          <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      </plugin>
+
+
+      <plugin name="left_fingertips_joint_mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+        <joint>left_inner_finger_joint</joint>
+        <mimicJoint>left_fingertips_joint</mimicJoint>
+       
+        <multiplier>-1</multiplier>
+        <offset>0</offset>
+        <sensitiveness>1</sensitiveness>  
+        <maxEffort>100</maxEffort>            
+          <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      </plugin>
+  
+
+
+
+   
+      <plugin name="right_outer_finger_joint_mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+        <joint>left_inner_finger_joint</joint>
+        <mimicJoint>right_outer_finger_joint</mimicJoint>
+        
+        <multiplier>-1</multiplier>
+        <offset>0</offset>
+        <sensitiveness>1</sensitiveness>  
+        <maxEffort>100</maxEffort>            
+          <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      </plugin>
+
+  
+      <plugin name="right_inner_finger_joint_mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+        <joint>left_inner_finger_joint</joint>
+        <mimicJoint>right_inner_finger_joint</mimicJoint>
+       
+        <multiplier>-1</multiplier>
+        <offset>0</offset>
+        <sensitiveness>1</sensitiveness>  
+        <maxEffort>100</maxEffort>            
+          <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      </plugin>
+ 
+
+   
+
+
+
+
+
+  
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo-->
+
+     </xacro:macro>
+</root>

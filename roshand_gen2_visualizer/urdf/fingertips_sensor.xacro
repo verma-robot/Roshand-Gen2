@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<root xmlns:xacro="http://ros.org/wiki/xacro" >
+
+	<xacro:macro name="finger_sensor" params="prefix sensor_number joint_origin_xyz joint_origin_rpy">
+		<link name="${prefix}_fingertips_sensor_${sensor_number}_link">
+                   <inertial>
+                           <origin
+                                xyz="-7.6586888858697E-17 -7.7715611723761E-16 -0.00101000000000082"
+                                rpy="0 0 0" />
+                           <mass  value="2.79224755051061E-05" />
+                           <inertia
+                                     ixx="3.74170479260257E-11"
+                                     ixy="-2.87186768920737E-27"
+                                     ixz="-1.01519706774524E-26"
+                                     iyy="3.74170479260257E-11"
+                                     iyz="-7.72266914025629E-27"
+                                     izz="5.58449510102122E-11" />
+                    </inertial>
+                    <visual>
+                            <origin
+                                     xyz="0 0 0"
+                                     rpy="0 0 0" />
+                            <geometry>
+                                    <mesh  filename="package://roshand_gen2_visualizer/meshes/fingertips_sensor_link.STL" />
+                            </geometry>
+                            <material
+                                        name="">
+                                        <color rgba="1 1 1 1" />
+                            </material>
+                    </visual>
+                    <collision>
+                            <origin
+                                      xyz="0 0 0"
+                                      rpy="0 0 0" />
+                            <geometry>
+                                      <mesh filename="package://roshand_gen2_visualizer/meshes/fingertips_sensor_link.STL" />
+                            </geometry>
+                    </collision>
+		</link>
+
+	        <joint name="${prefix}_fingertips_${sensor_number}_joint" type="fixed">
+                        <parent link="${prefix}_fingertips_link"/>
+                        <child link="${prefix}_fingertips_sensor_${sensor_number}_link"/>
+                        <axis xyz="0 0 0"/>
+                        <origin xyz="${joint_origin_xyz}" rpy="${joint_origin_rpy}" />
+                </joint>
+	</xacro:macro>
+</root>
