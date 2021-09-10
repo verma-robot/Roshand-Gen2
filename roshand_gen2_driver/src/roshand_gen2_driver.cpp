@@ -30,17 +30,25 @@ namespace roshand_gen2 {
          try {
 
               sp -> open(port_name, ec); 
-              sp -> set_option(boost::asio::serial_port::baud_rate(port_rate));
-	      sp -> set_option(boost::asio::serial_port::flow_control(boost::asio::serial_port::flow_control::none));
-	      sp -> set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
-	      sp -> set_option(boost::asio::serial_port::stop_bits(boost::asio::serial_port::stop_bits::one));
-	      sp -> set_option(boost::asio::serial_port::character_size(8));
+              
+              if(sp -> is_open())
+              {
 
-              ros::Time::init();
-	      current_time = ros::Time::now();
-	      last_time = ros::Time::now();
-              std::cout << "serial ok" << std::endl;
+                  sp -> set_option(boost::asio::serial_port::baud_rate(port_rate));
+	          sp -> set_option(boost::asio::serial_port::flow_control(boost::asio::serial_port::flow_control::none));
+	          sp -> set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
+	          sp -> set_option(boost::asio::serial_port::stop_bits(boost::asio::serial_port::stop_bits::one));
+	          sp -> set_option(boost::asio::serial_port::character_size(8));
 
+                  tcflush(STDIN_FILENO, TCIFLUSH);
+                  tcflush(STDOUT_FILENO, TCOFLUSH);
+                  usleep(10000);
+                  ros::Time::init();
+	          current_time = ros::Time::now();
+	          last_time = ros::Time::now();
+                  ROS_INFO("Serial open succeed.......");
+              }
+              else ROS_ERROR( "Serial open failed, please retry .......") ;
          }
          catch(...) {
 
@@ -86,8 +94,8 @@ void roshand_gen2_hardware::set_sensor_thread_hold( void ) {
 
 
     boost::asio::write(*sp, boost::asio::buffer(&data_read[0], 33), ec);
-
-    listen_data(33, 50);
+//std::cout << "set threadhold...." << std::endl;
+    listen_data(33, 1);
 }
 
 
@@ -96,7 +104,7 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
 
 
     READ_BUFFER_SIZE = bytes_transferred;
-
+//std::cout << int16_t(buf[2]) << "," << READ_BUFFER_SIZE << std::endl;
     if(READ_BUFFER_SIZE == 5)
     {   
 
@@ -179,7 +187,6 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[0] = buf[5 + 0 * 28 + 0 * 2];
               hand_data.finger[0].sensor[0] = data_raw.f;
 
-              //if(data_raw.f > sensor_Max_value)hand_data.finger[0].sensor[0]=sensor_Max_value;
               hand_data.finger[0].contact[0] = (bool)((uint8_t)buf[60 + 0 * 14 + 0]);   
               hand_data.finger[0].threadhold[0] = (uint8_t)sensor_thread_hold[0][0];   
 
@@ -187,7 +194,7 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 0 * 28 + 1 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 1 * 2];
               hand_data.finger[0].sensor[1] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[1]=sensor_Max_value;
+
               hand_data.finger[0].contact[1] = (bool)((uint8_t)buf[60 + 0 * 14 + 1]);  
               hand_data.finger[0].threadhold[1] = (uint8_t)sensor_thread_hold[0][1];   
 
@@ -196,7 +203,7 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 0 * 28 + 2 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 2 * 2];
               hand_data.finger[0].sensor[2] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[2]=sensor_Max_value;
+
               hand_data.finger[0].contact[2] = (bool)((uint8_t)buf[60 + 0 * 14 + 2]); 
               hand_data.finger[0].threadhold[2] = (uint8_t)sensor_thread_hold[0][2];    
 
@@ -204,21 +211,20 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 0 * 28 + 3 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 3 * 2];
               hand_data.finger[0].sensor[3] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[3]=sensor_Max_value;
+
               hand_data.finger[0].contact[3] = (bool)((uint8_t)buf[60 + 0 * 14 + 3]);  
               hand_data.finger[0].threadhold[3] = (uint8_t)sensor_thread_hold[0][3];    
 
               data_raw.u[1] = buf[4 + 0 * 28 + 4 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 4 * 2];
               hand_data.finger[0].sensor[4] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[4]=sensor_Max_value;
+
               hand_data.finger[0].contact[4] = (bool)((uint8_t)buf[60 + 0 * 14 + 4]);  
               hand_data.finger[0].threadhold[4] = (uint8_t)sensor_thread_hold[0][4];    
 
               data_raw.u[1] = buf[4 + 0 * 28 + 5 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 5 * 2];
               hand_data.finger[0].sensor[5] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[5]=sensor_Max_value;
               hand_data.finger[0].contact[5] = (bool)((uint8_t)buf[60 + 0 * 14 + 5]);  
               hand_data.finger[0].threadhold[5] = (uint8_t)sensor_thread_hold[0][5];    
 
@@ -226,14 +232,12 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 0 * 28 + 6 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 6 * 2];
               hand_data.finger[0].sensor[6] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[6]=sensor_Max_value;
               hand_data.finger[0].contact[6] = (bool)((uint8_t)buf[60 + 0 * 14 + 6]); 
               hand_data.finger[0].threadhold[6] = (uint8_t)sensor_thread_hold[0][6];     
 
               data_raw.u[1] = buf[4 + 0 * 28 + 7 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 7 * 2];
               hand_data.finger[0].sensor[7] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[7]=sensor_Max_value;
               hand_data.finger[0].contact[7] = (bool)((uint8_t)buf[60 + 0 * 14 + 7]);  
               hand_data.finger[0].threadhold[7] = (uint8_t)sensor_thread_hold[0][7]; 
 
@@ -241,21 +245,18 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 0 * 28 + 8 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 8 * 2];
               hand_data.finger[0].sensor[8] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[0]=sensor_Max_value;
               hand_data.finger[0].contact[8] = (bool)((uint8_t)buf[60 + 0 * 14 + 8]); 
               hand_data.finger[0].threadhold[8] = (uint8_t)sensor_thread_hold[0][8];      
 
               data_raw.u[1] = buf[4 + 0 * 28 + 9 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 9 * 2];
               hand_data.finger[0].sensor[9] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[1]=sensor_Max_value;
               hand_data.finger[0].contact[9] = (bool)((uint8_t)buf[60 + 0 * 14 + 9]); 
               hand_data.finger[0].threadhold[9] = (uint8_t)sensor_thread_hold[0][9]; 
 
               data_raw.u[1] = buf[4 + 0 * 28 + 10 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 10 * 2];
               hand_data.finger[0].sensor[10] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[2] = sensor_Max_value;
               hand_data.finger[0].contact[10] = (bool)((uint8_t)buf[60 + 0 * 14 + 10]);  
               hand_data.finger[0].threadhold[10] = (uint8_t)sensor_thread_hold[0][10];    
 
@@ -263,7 +264,6 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 0 * 28 + 11 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 11 * 2];
               hand_data.finger[0].sensor[11] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[3]=sensor_Max_value;
               hand_data.finger[0].contact[11] = (bool)((uint8_t)buf[60 + 0 * 14 + 11]); 
               hand_data.finger[0].threadhold[11] = (uint8_t)sensor_thread_hold[0][11];     
 
@@ -271,14 +271,12 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 0 * 28 + 12 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 12 * 2];
               hand_data.finger[0].sensor[12] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[4]=sensor_Max_value;
               hand_data.finger[0].contact[12] = (bool)((uint8_t)buf[60 + 0 * 14 + 12]);  
               hand_data.finger[0].threadhold[12] = (uint8_t)sensor_thread_hold[0][12];    
 
               data_raw.u[1] = buf[4 + 0 * 28 + 13 * 2];
               data_raw.u[0] = buf[5 + 0 * 28 + 13 * 2];
               hand_data.finger[0].sensor[13] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[5]=sensor_Max_value;
               hand_data.finger[0].contact[13] = (bool)((uint8_t)buf[60 + 0 * 14 + 13]);
               hand_data.finger[0].threadhold[13] = (uint8_t)sensor_thread_hold[0][13];      
 
@@ -286,7 +284,6 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[0] = buf[5 + 1 * 28 + 0 * 2];
               hand_data.finger[1].sensor[0] = data_raw.f;
 
-              //if(data_raw.f > sensor_Max_value)hand_data.finger[0].sensor[0]=sensor_Max_value;
               hand_data.finger[1].contact[0] = (bool)((uint8_t)buf[60 + 1 * 14 + 0]);   
               hand_data.finger[1].threadhold[0] = (uint8_t)sensor_thread_hold[1][0];   
 
@@ -294,7 +291,6 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 1 * 28 + 1 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 1 * 2];
               hand_data.finger[1].sensor[1] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[1]=sensor_Max_value;
               hand_data.finger[1].contact[1] = (bool)((uint8_t)buf[60 + 1 * 14 + 1]);  
               hand_data.finger[1].threadhold[1] = (uint8_t)sensor_thread_hold[1][1];   
 
@@ -303,7 +299,6 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 1 * 28 + 2 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 2 * 2];
               hand_data.finger[1].sensor[2] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[2]=sensor_Max_value;
               hand_data.finger[1].contact[2] = (bool)((uint8_t)buf[60 + 1 * 14 + 2]); 
               hand_data.finger[1].threadhold[2] = (uint8_t)sensor_thread_hold[1][2];    
 
@@ -311,21 +306,18 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 1 * 28 + 3 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 3 * 2];
               hand_data.finger[1].sensor[3] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[3]=sensor_Max_value;
               hand_data.finger[1].contact[3] = (bool)((uint8_t)buf[60 + 1 * 14 + 3]);  
               hand_data.finger[1].threadhold[3] = (uint8_t)sensor_thread_hold[1][3];    
 
               data_raw.u[1] = buf[4 + 1 * 28 + 4 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 4 * 2];
               hand_data.finger[1].sensor[4] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[4]=sensor_Max_value;
               hand_data.finger[1].contact[4] = (bool)((uint8_t)buf[60 + 1 * 14 + 4]);  
               hand_data.finger[1].threadhold[4] = (uint8_t)sensor_thread_hold[1][4];    
 
               data_raw.u[1] = buf[4 + 1 * 28 + 5 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 5 * 2];
               hand_data.finger[1].sensor[5] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[5]=sensor_Max_value;
               hand_data.finger[1].contact[5] = (bool)((uint8_t)buf[60 + 1 * 14 + 5]);  
               hand_data.finger[1].threadhold[5] = (uint8_t)sensor_thread_hold[1][5];    
 
@@ -333,14 +325,12 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 1 * 28 + 6 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 6 * 2];
               hand_data.finger[1].sensor[6] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[6]=sensor_Max_value;
               hand_data.finger[1].contact[6] = (bool)((uint8_t)buf[60 + 1 * 14 + 6]); 
               hand_data.finger[1].threadhold[6] = (uint8_t)sensor_thread_hold[1][6];     
 
               data_raw.u[1] = buf[4 + 1 * 28 + 7 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 7 * 2];
               hand_data.finger[1].sensor[7] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[0].sensor[7]=sensor_Max_value;
               hand_data.finger[1].contact[7] = (bool)((uint8_t)buf[60 + 1 * 14 + 7]);  
               hand_data.finger[1].threadhold[7] = (uint8_t)sensor_thread_hold[1][7]; 
 
@@ -348,21 +338,18 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 1 * 28 + 8 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 8 * 2];
               hand_data.finger[1].sensor[8] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[0]=sensor_Max_value;
               hand_data.finger[1].contact[8] = (bool)((uint8_t)buf[60 + 1 * 14 + 8]); 
               hand_data.finger[1].threadhold[8] = (uint8_t)sensor_thread_hold[1][8];      
 
               data_raw.u[1] = buf[4 + 1 * 28 + 9 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 9 * 2];
               hand_data.finger[1].sensor[9] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[1]=sensor_Max_value;
               hand_data.finger[1].contact[9] = (bool)((uint8_t)buf[60 + 1 * 14 + 9]); 
               hand_data.finger[1].threadhold[9] = (uint8_t)sensor_thread_hold[1][9]; 
 
               data_raw.u[1] = buf[4 + 1 * 28 + 10 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 10 * 2];
               hand_data.finger[1].sensor[10] = data_raw.f;
-             // if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[2] = sensor_Max_value;
               hand_data.finger[1].contact[10] = (bool)((uint8_t)buf[60 + 1 * 14 + 10]);  
               hand_data.finger[1].threadhold[10] = (uint8_t)sensor_thread_hold[1][10];    
 
@@ -370,7 +357,6 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 1 * 28 + 11 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 11 * 2];
               hand_data.finger[1].sensor[11] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[3]=sensor_Max_value;
               hand_data.finger[1].contact[11] = (bool)((uint8_t)buf[60 + 1 * 14 + 11]); 
               hand_data.finger[1].threadhold[11] = (uint8_t)sensor_thread_hold[1][11];     
 
@@ -378,14 +364,12 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
               data_raw.u[1] = buf[4 + 1 * 28 + 12 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 12 * 2];
               hand_data.finger[1].sensor[12] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[4]=sensor_Max_value;
               hand_data.finger[1].contact[12] = (bool)((uint8_t)buf[60 + 1 * 14 + 12]);  
               hand_data.finger[1].threadhold[12] = (uint8_t)sensor_thread_hold[1][12];    
 
               data_raw.u[1] = buf[4 + 1 * 28 + 13 * 2];
               data_raw.u[0] = buf[5 + 1 * 28 + 13 * 2];
               hand_data.finger[1].sensor[13] = data_raw.f;
-              //if(data_raw.f>sensor_Max_value)hand_data.finger[1].sensor[5]=sensor_Max_value;
               hand_data.finger[1].contact[13] = (bool)((uint8_t)buf[60 + 1 * 14 + 13]);
               hand_data.finger[1].threadhold[13] = (uint8_t)sensor_thread_hold[1][13];      
 
@@ -448,20 +432,19 @@ void roshand_gen2_hardware::handle_read( char buf[], boost::system::error_code e
 void roshand_gen2_hardware::listen_data(uint8_t data_number, int max_seconds)
 {
 
-       boost::asio::deadline_timer timer( iosev); 
-
-       char buf5[5];
-       char buf99[99];
-       char buf33[33];
-
        if(data_number == 5)
        {
+
+         char buf5[5];
+         memset(&buf5, 0, 5);
          iosev.reset();
          boost::asio::async_read(*sp, boost::asio::buffer(buf5, sizeof(buf5)), boost::bind(&roshand_gen2_hardware::handle_read, this, buf5, _1, _2)) ;
 
         } 
       else if(data_number == 33)
       {
+         char buf33[33];
+         memset(&buf33, 0, 33);
          iosev.reset();
          boost::asio::async_read(*sp,  boost::asio::buffer(buf33, sizeof(buf33)),  boost::bind(&roshand_gen2_hardware::handle_read, this, buf33, _1, _2)) ;
 
@@ -469,16 +452,23 @@ void roshand_gen2_hardware::listen_data(uint8_t data_number, int max_seconds)
         }
       else if(data_number == 99)
       {
-            iosev.reset();
-            boost::asio::async_read(*sp,  boost::asio::buffer(buf99, sizeof(buf99)), boost::bind(&roshand_gen2_hardware::handle_read, this, buf99, _1, _2)) ;
+
+          char buf99[99];
+          memset(&buf99, 0, 99);
+          iosev.reset();
+          boost::asio::async_read(*sp,  boost::asio::buffer(buf99, sizeof(buf99)), boost::bind(&roshand_gen2_hardware::handle_read, this, buf99, _1, _2)) ;
 
 
         } 
+       boost::asio::deadline_timer timer( iosev); 
+       int ti = timer.expires_from_now(boost::posix_time::millisec(max_seconds)) ;      
 
-       timer.expires_from_now(boost::posix_time::millisec(max_seconds)) ;      
-       timer.async_wait(boost::bind(&boost::asio::serial_port::cancel,boost::ref(*sp)));
 
+       //timer.async_wait(boost::bind(&boost::asio::serial_port::cancel,boost::ref(*sp)));
+       timer.wait(ec);
+if(ti > 0)iosev.reset();
 
+//std:: cout << "timer: " << int16_t(ti) << std::endl;
        try{
 
                  iosev.run();
@@ -489,8 +479,6 @@ void roshand_gen2_hardware::listen_data(uint8_t data_number, int max_seconds)
 
        }
 
-
-
 }
 
 //set sensor bias
@@ -499,9 +487,12 @@ void roshand_gen2_hardware::set_sensor_bias(uint16_t sensor_hi)
    uint8_t data_read[6] = {0xFF, 0x01, 0x05, 0x01, 0x00, 0x6D};  
    data_read[4] = ((uint16_t)sensor_hi) & 0xFF;
 
+   tcflush(STDIN_FILENO, TCIFLUSH);
+   tcflush(STDOUT_FILENO, TCOFLUSH);
+   usleep(5000);
    boost::asio::write(*sp, boost::asio::buffer(&data_read[0], 6), ec);
-//   std::cout << "send bias" << std::endl;
-   listen_data(5, 20);
+   //std::cout << "send bias" << std::endl;
+   listen_data(5, 1);
 
 }
 
@@ -515,8 +506,8 @@ void roshand_gen2_hardware::close_with_sensor(uint8_t close_step_mag, uint8_t op
    data_read[5] = open_step_mag;
 
    boost::asio::write(*sp, boost::asio::buffer(&data_read[0], 7), ec);
-
-   listen_data(5, 20);
+   //std::cout << "close with sensor " << std::endl;
+   listen_data(5, 1);
 
 }
 
@@ -545,8 +536,8 @@ void roshand_gen2_hardware::close_without_sensor(float msg)
    data_read[6] = (target_position ) & 0xFF;
 
    boost::asio::write(*sp, boost::asio::buffer(&data_read[0], 8),ec);
-
-   listen_data(5, 20);
+  // std::cout << "close with out sensor " << std::endl;
+   listen_data(5, 1);
 
 }
 void roshand_gen2_hardware::read_data()
@@ -556,8 +547,8 @@ void roshand_gen2_hardware::read_data()
    uint8_t data_read[5] = {0xFF, 0x01, 0x03, 0x00,0x6D};  
 
    boost::asio::write(*sp, boost::asio::buffer(&data_read[0],5),ec);
- //  std::cout << "read data" << std::endl;
-   listen_data(99,20);
+   //std::cout << "read data" << std::endl;
+   listen_data(99,1);
 
 }
 
@@ -568,7 +559,7 @@ void roshand_gen2_hardware::calibrate_data()
 
    boost::asio::write(*sp, boost::asio::buffer(&data_read[0],5),ec);
 //std::cout << "calibrate data" << std::endl;
-   listen_data(5, 10);
+   listen_data(5, 1);
 
 }
 
@@ -578,8 +569,8 @@ void roshand_gen2_hardware::open_gripper()
    uint8_t data_read[5] = {0xFF, 0x01, 0x09, 0x00,0x6D};  
 
    boost::asio::write(*sp, boost::asio::buffer(&data_read[0],5),ec);
-//std::cout << "calibrate data" << std::endl;
-   listen_data(5, 10);
+//std::cout << "open gripper" << std::endl;
+   listen_data(5, 1);
 
 
 }
