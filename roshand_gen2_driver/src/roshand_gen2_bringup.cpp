@@ -7,6 +7,7 @@ roshand_gen2::roshand_gen2_hardware hand;
 
 ros::Publisher pub;
 ros::Publisher joint_pub;
+bool gripper_on_action;
 
 typedef actionlib::SimpleActionServer<roshand_gen2_msgs::HandCommandAction> FingerActionServer;
 
@@ -14,90 +15,151 @@ typedef actionlib::SimpleActionServer<roshand_gen2_msgs::HandCommandAction> Fing
 // move without sensor
 void execute_hand_server(const roshand_gen2_msgs::HandCommandGoalConstPtr& demo_goal, FingerActionServer* as)
 {
-    ros::Rate r(50); 
+
 
     uint8_t close_step_mag;
     uint8_t open_step_mag;
 
     roshand_gen2_msgs::HandCommandFeedback feedback;   
     roshand_gen2_msgs::HandCommandResult result_;    /* 创建一个feedback对象 */    
-    
-    int count = 0;
-
+    while(gripper_on_action == true)gripper_on_action = false;
     while(result_.finish == true)result_.finish = false;
     if(demo_goal -> use_sensor == true)//采用触觉控制
     {
-
-        close_step_mag =  demo_goal -> close_step_mag;
-        open_step_mag = demo_goal -> open_step_masg;
-        if(close_step_mag > max_close_step_mag)close_step_mag = max_close_step_mag;
-        if(open_step_mag > max_open_setp_mag)open_step_mag = max_open_setp_mag;
-
-        while(hand.FingerCloseWithSensor == true)hand.FingerCloseWithSensor = false;
-        while(hand.FingerOpen == true)hand.FingerOpen = false;
-        while(hand.CALIBRATE_SENSOR_FINESHED == true)hand.CALIBRATE_SENSOR_FINESHED = false;
-        while(hand.SET_SENSOR_THREADHOLD == true)hand.SET_SENSOR_THREADHOLD = false;
-
-        while(hand.FingerOpen == false)hand.open_gripper();//张开手抓
-        while(hand.CALIBRATE_SENSOR_FINESHED == false)hand.calibrate_data();//校准手抓     
-
-     
-        while(hand.SET_SENSOR_THREADHOLD == false)
+        int count = 0;
+        while(gripper_on_action == false)gripper_on_action = true;
+        if(gripper_on_action == true)
         {
+            close_step_mag =  demo_goal -> close_step_mag;
+            open_step_mag = demo_goal -> open_step_masg;
+            if(close_step_mag > max_close_step_mag)close_step_mag = max_close_step_mag;
+            if(open_step_mag > max_open_setp_mag)open_step_mag = max_open_setp_mag;
 
-            for(int i = 0; i < 14; i++)hand.sensor_thread_hold[0][i] = demo_goal -> sensor_threadhold;
-            for(int i = 0; i < 14; i++)hand.sensor_thread_hold[1][i] = demo_goal -> sensor_threadhold;
+            while(hand.FingerCloseWithSensor == true)hand.FingerCloseWithSensor = false;
+            while(hand.FingerOpen == true)hand.FingerOpen = false;
+            while(hand.CALIBRATE_SENSOR_FINESHED == true)hand.CALIBRATE_SENSOR_FINESHED = false;
+            while(hand.SET_SENSOR_THREADHOLD == true)hand.SET_SENSOR_THREADHOLD = false;
 
-            hand.set_sensor_thread_hold();
+            count = 0;
+            while(hand.FingerOpen == false && count < 50){hand.open_gripper(); count++; }//张开手抓
+            count = 0;
+            while(hand.CALIBRATE_SENSOR_FINESHED == false && count < 5){hand.calibrate_data(); count++; }//校准手抓     
+
+            count = 0;
+            while(hand.SET_SENSOR_THREADHOLD == false && count < 5)
+            {
+
+                for(int i = 0; i < 14; i++)hand.sensor_thread_hold[0][i] = demo_goal -> sensor_threadhold;
+                for(int i = 0; i < 14; i++)hand.sensor_thread_hold[1][i] = demo_goal -> sensor_threadhold;
+
+                hand.set_sensor_thread_hold();
+                count++;
+            }
+
+            count = 0;
+            ros::Rate r(20); 
+            while(hand.FingerCloseWithSensor == false && count < 50)
+            {
+
+
+                int grasp_read_count = 0;
+                while(hand.READ_DATA == true)hand.READ_DATA = false;
+                grasp_read_count = 0;
+                while(hand.READ_DATA == false && grasp_read_count < 5)
+                {
+           
+                     tcflush(STDIN_FILENO, TCIFLUSH);
+                     tcflush(STDOUT_FILENO, TCOFLUSH);   
+                     hand.read_data(); 
+                     grasp_read_count++; 
+
+                }
+               // if(hand.READ_DATA == true)
+               // {
+
+                     pub.publish(hand.hand_data); 
+                     joint_pub.publish(hand.jointstate);    
+
+               // }
+
+                hand.close_with_sensor(close_step_mag, open_step_mag);
+
+                feedback.state = hand.hand_data;
+                as ->  publishFeedback(feedback);
+
+                count++;
+                r.sleep();
+            }
+
+            if(hand.FingerCloseWithSensor == true)
+            {
+                result_.finish = hand.FingerCloseWithSensor;
+                as -> setSucceeded(result_); 
+            }
+            else
+            {
+                result_.finish = hand.FingerCloseWithSensor;
+                as -> setAborted(result_); 
+
+            }
+            
+            while(hand.FingerCloseWithSensor == true)hand.FingerCloseWithSensor = false;
+            while(hand.FingerOpen == true)hand.FingerOpen = false;
+            while(hand.CALIBRATE_SENSOR_FINESHED == true)hand.CALIBRATE_SENSOR_FINESHED = false;
+            while(hand.SET_SENSOR_THREADHOLD == true)hand.SET_SENSOR_THREADHOLD = false;
+            while(gripper_on_action == true)gripper_on_action = false;
         }
-
-        while(hand.FingerCloseWithSensor == false)
-        {
-
-           hand.close_with_sensor(close_step_mag, open_step_mag);
-
-           feedback.state = hand.hand_data;
-           as ->  publishFeedback(feedback);
-
-
-           r.sleep();
-        }
-
-
-        while(result_.finish == false)result_.finish = hand.FingerCloseWithSensor;
-        as -> setSucceeded(result_); 
-        while(hand.FingerCloseWithSensor == true)hand.FingerCloseWithSensor = false;
-        while(hand.FingerOpen == true)hand.FingerOpen = false;
-        while(hand.CALIBRATE_SENSOR_FINESHED == true)hand.CALIBRATE_SENSOR_FINESHED = false;
-        while(hand.SET_SENSOR_THREADHOLD == true)hand.SET_SENSOR_THREADHOLD = false;
-
-
     }
     else //采用非触控的模式
     {
-
-        while(hand.FingerCloseWithOutSensor == true)hand.FingerCloseWithOutSensor = false;
-        while(hand.FingerCloseWithOutSensor == false)
+        int count = 0;
+        while(gripper_on_action == false)gripper_on_action = true;
+        if(gripper_on_action == true)
         {
+            while(hand.FingerCloseWithOutSensor == true)hand.FingerCloseWithOutSensor = false;
+            ros::Rate r(20); 
+            while(hand.FingerCloseWithOutSensor == false && count < 50)
+            {
 
-           float distance;
-           distance = demo_goal -> goal_finger_distance;
+                int grasp_read_count = 0;
+                while(hand.READ_DATA == true)hand.READ_DATA = false;
+                grasp_read_count = 0;
+                while(hand.READ_DATA == false && grasp_read_count < 5)
+                {
+   
+                     tcflush(STDIN_FILENO, TCIFLUSH);
+                     tcflush(STDOUT_FILENO, TCOFLUSH);           
+                     hand.read_data(); 
+                     grasp_read_count++; 
 
-           hand.close_without_sensor(distance);
+                }
+                //if(hand.READ_DATA == true)
+               // {
+                     pub.publish(hand.hand_data); 
+                     joint_pub.publish(hand.jointstate);         
 
-           feedback.state = hand.hand_data;
-           as ->  publishFeedback(feedback);
-           count += 1;
+                //}
 
-           r.sleep();
+                float distance;
+                distance = demo_goal -> goal_finger_distance;
+ 
+                hand.close_without_sensor(distance);
+
+                feedback.state = hand.hand_data;
+                as ->  publishFeedback(feedback);
+
+                while(hand.READ_DATA == true)hand.READ_DATA = false;
+                count += 1;
+                r.sleep();
+            }
+
+            while(result_.finish == false)result_.finish = hand.FingerCloseWithOutSensor;
+            as -> setSucceeded(result_); 
+            while(hand.FingerCloseWithOutSensor == true)hand.FingerCloseWithOutSensor = false;
+            while(gripper_on_action == true)gripper_on_action = false;
         }
-
-        while(result_.finish == false)result_.finish = hand.FingerCloseWithOutSensor;
-        as -> setSucceeded(result_); 
-        while(hand.FingerCloseWithOutSensor == true)hand.FingerCloseWithOutSensor = false;
-
     }
-
+    while(gripper_on_action == true)gripper_on_action = false;
 }
 
 
@@ -136,6 +198,7 @@ int main(int argc, char** argv)
         std::string dir; 
         int sensor_bias;
         std::string ns;
+        int retry_count = 0;
 
         std::vector<int> all_sensor_thread_hold[2];
 
@@ -152,8 +215,12 @@ int main(int argc, char** argv)
 	 
         hand.init(port_name, port_rate);
 
+        tcflush(STDIN_FILENO, TCIFLUSH);
+        tcflush(STDOUT_FILENO, TCOFLUSH);
+        usleep(10000);
+
         while(hand.SET_SENSOR_BIAS == true)hand.SET_SENSOR_BIAS = false;
-        while(hand.SET_SENSOR_BIAS == false){hand.set_sensor_bias(sensor_bias); }
+        while(hand.SET_SENSOR_BIAS == false && retry_count < 10){hand.set_sensor_bias(sensor_bias); retry_count++; }
         if(hand.SET_SENSOR_BIAS == true)ROS_INFO("Sensor bias set succeed....................");
         else ROS_ERROR("Sensor bias set faild, please restart........");
         while(hand.SET_SENSOR_BIAS == true)hand.SET_SENSOR_BIAS = false;
@@ -161,22 +228,29 @@ int main(int argc, char** argv)
         hand.sensor_thread_hold[0] = all_sensor_thread_hold[0];
         hand.sensor_thread_hold[1] = all_sensor_thread_hold[1];
    
+        retry_count = 0;
         while(hand.SET_SENSOR_THREADHOLD == true)hand.SET_SENSOR_THREADHOLD = false;
-        while(hand.SET_SENSOR_THREADHOLD == false){hand.set_sensor_thread_hold(); }
+        while(hand.SET_SENSOR_THREADHOLD == false && retry_count < 10){hand.set_sensor_thread_hold(); retry_count++; }
         if(hand.SET_SENSOR_THREADHOLD == true)ROS_INFO("Sensor threadhold Set succeed......");
         else ROS_ERROR("Sensor threadhold Set faild, please restart......");
         while(hand.SET_SENSOR_THREADHOLD == true)hand.SET_SENSOR_THREADHOLD = false;
 
+        retry_count = 0;
         while(hand.FingerOpen == true)hand.FingerOpen = false;
-        while(hand.FingerOpen == false)hand.open_gripper();//张开手抓
+        while(hand.FingerOpen == false && retry_count < 50){hand.open_gripper(); retry_count++;}//张开手抓
+        if(hand.FingerOpen == true)ROS_INFO("Gripper opend succeed......");
+        else ROS_ERROR("Gripper open failed......");
         while(hand.FingerOpen == true)hand.FingerOpen = false;
 
+        retry_count = 0;
         while(hand.CALIBRATE_SENSOR_FINESHED == true)hand.CALIBRATE_SENSOR_FINESHED = false;
-        while(hand.CALIBRATE_SENSOR_FINESHED == false ){hand.calibrate_data(); }
+        while(hand.CALIBRATE_SENSOR_FINESHED == false && retry_count < 10){hand.calibrate_data(); retry_count++; }
         if(hand.CALIBRATE_SENSOR_FINESHED == true)ROS_INFO("Sensor calibrated succeed......");
         else ROS_ERROR("Sensor calibrated failed");
 //std::cout << hand.CALIBRATE_SENSOR_FINESHED << std::endl;
         while(hand.CALIBRATE_SENSOR_FINESHED == true)hand.CALIBRATE_SENSOR_FINESHED=false;
+
+        while(gripper_on_action == true)gripper_on_action = false;
 
         ros::ServiceServer calibrate_sensor = nh.advertiseService(ns + "/calibrate_sensor_service", calibrate_senser);
 
@@ -187,23 +261,40 @@ int main(int argc, char** argv)
         finger_move_server.start();
 
 
-	ros::Rate loop_rate(50);
+	ros::Rate loop_rate(20);
 
 	while (ros::ok()) 
 	{
 
             try
             {
+               if(gripper_on_action == false)
+               {
+                   retry_count = 0;
+                   while(hand.READ_DATA == true)hand.READ_DATA = false;
+                   while(hand.READ_DATA == false && retry_count < 5)
+                   {
 
-               hand.read_data();
 
-               pub.publish(hand.hand_data); 
-               joint_pub.publish(hand.jointstate);
+                       tcflush(STDIN_FILENO, TCIFLUSH);
+                       tcflush(STDOUT_FILENO, TCOFLUSH);
 
+                       hand.read_data();
+                       //usleep(20000);
+                       retry_count++;
+                       //co++;
+
+                   }          
+                   if(hand.READ_DATA == true)
+                   {
+                      pub.publish(hand.hand_data); 
+                      joint_pub.publish(hand.jointstate);
+                   }
+                   while(hand.READ_DATA == true)hand.READ_DATA = false;
+                  
+               }
                ros::spinOnce();
 	       loop_rate.sleep();
- 
-
 
             }
             catch(const std::exception& e)
