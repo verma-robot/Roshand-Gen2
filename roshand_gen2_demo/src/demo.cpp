@@ -8,14 +8,15 @@ typedef actionlib::SimpleActionClient<roshand_gen2_msgs::HandCommandAction> Clie
 
 void doneaction(const actionlib::SimpleClientGoalState& state, const roshand_gen2_msgs::HandCommandResultConstPtr& result)
 {
-
+    ROS_INFO("Goal arrived");
     finished = result -> finish;
 }
  
 
 void activeaction()
 {
-    ROS_INFO("Goal just went active");
+
+    ROS_INFO("Goal arriving...................");
 }
  
 
