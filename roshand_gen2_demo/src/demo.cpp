@@ -59,8 +59,7 @@ int main(int argc, char** argv)
     ROS_INFO("Close the hand with sensor.......................");
     demo_goal.use_sensor = true;
     demo_goal.sensor_threadhold = 10;
-    demo_goal.close_step_mag = 36;
-    demo_goal.open_step_masg = 2;
+    demo_goal.close_step_mag = 8;
 
     client.sendGoal(demo_goal,  doneaction, activeaction, feedbackaction);
 
@@ -71,8 +70,7 @@ int main(int argc, char** argv)
     ROS_INFO("Close the hand with sensor.......................");
     demo_goal.use_sensor = true;
     demo_goal.sensor_threadhold = 10;
-    demo_goal.close_step_mag = 36;
-    demo_goal.open_step_masg = 2;
+    demo_goal.close_step_mag = 8;
 
     client.sendGoal(demo_goal,  doneaction, activeaction, feedbackaction);
 
