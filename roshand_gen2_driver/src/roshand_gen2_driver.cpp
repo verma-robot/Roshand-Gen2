@@ -497,7 +497,7 @@ void roshand_gen2_hardware::set_sensor_bias(uint16_t sensor_hi)
 }
 
 
-void roshand_gen2_hardware::close_with_sensor(uint8_t close_step_mag, uint8_t open_step_mag)
+void roshand_gen2_hardware::close_with_sensor(uint8_t close_step_mag)
 {
 
    uint8_t data_read[6] = {0xFF, 0x01, 0x08, 0x01, 0x00, 0x6D};  
