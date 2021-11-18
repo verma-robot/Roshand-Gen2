@@ -500,12 +500,11 @@ void roshand_gen2_hardware::set_sensor_bias(uint16_t sensor_hi)
 void roshand_gen2_hardware::close_with_sensor(uint8_t close_step_mag, uint8_t open_step_mag)
 {
 
-   uint8_t data_read[7] = {0xFF, 0x01, 0x08, 0x02, 0x00, 0x00, 0x6D};  
+   uint8_t data_read[6] = {0xFF, 0x01, 0x08, 0x01, 0x00, 0x6D};  
 
-   data_read[4] = close_step_mag;
-   data_read[5] = open_step_mag;
+   data_read[4] = close_step_mag;  
 
-   boost::asio::write(*sp, boost::asio::buffer(&data_read[0], 7), ec);
+   boost::asio::write(*sp, boost::asio::buffer(&data_read[0], 6), ec);
    //std::cout << "close with sensor " << std::endl;
    listen_data(5, 1);
 
