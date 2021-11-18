@@ -1,7 +1,6 @@
 #include "roshand_driver.h"
 
-uint8_t max_close_step_mag = 32;
-uint8_t max_open_setp_mag = 4;
+uint8_t max_close_step_mag = 8;
 
 roshand_gen2::roshand_gen2_hardware hand;	
 
@@ -18,7 +17,6 @@ void execute_hand_server(const roshand_gen2_msgs::HandCommandGoalConstPtr& demo_
 
 
     uint8_t close_step_mag;
-    uint8_t open_step_mag;
 
     roshand_gen2_msgs::HandCommandFeedback feedback;   
     roshand_gen2_msgs::HandCommandResult result_;    /* 创建一个feedback对象 */    
@@ -31,9 +29,7 @@ void execute_hand_server(const roshand_gen2_msgs::HandCommandGoalConstPtr& demo_
         if(gripper_on_action == true)
         {
             close_step_mag =  demo_goal -> close_step_mag;
-            open_step_mag = demo_goal -> open_step_masg;
             if(close_step_mag > max_close_step_mag)close_step_mag = max_close_step_mag;
-            if(open_step_mag > max_open_setp_mag)open_step_mag = max_open_setp_mag;
 
             while(hand.FingerCloseWithSensor == true)hand.FingerCloseWithSensor = false;
             while(hand.FingerOpen == true)hand.FingerOpen = false;
@@ -82,7 +78,7 @@ void execute_hand_server(const roshand_gen2_msgs::HandCommandGoalConstPtr& demo_
 
                // }
 
-                hand.close_with_sensor(close_step_mag, open_step_mag);
+                hand.close_with_sensor(close_step_mag);
 
                 feedback.state = hand.hand_data;
                 as ->  publishFeedback(feedback);
