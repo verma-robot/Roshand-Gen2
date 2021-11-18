@@ -79,7 +79,7 @@ namespace roshand_gen2
                     void read_data();
 
                     void close_without_sensor(float target_position);
-                    void close_with_sensor(uint8_t close_step_mag, uint8_t open_step_mag);
+                    void close_with_sensor(uint8_t close_step_mag);
                     void open_gripper(void);
 
                     void set_sensor_thread_hold();
