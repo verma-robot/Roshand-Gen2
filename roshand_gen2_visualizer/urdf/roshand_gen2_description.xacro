@@ -66,7 +66,7 @@
   <xacro:property name="sensor_14_origin_rpy" value="0 1.5708 0" />
 
 
-  <xacro:arg name="robot_namespace" default="/" />  
+
     <xacro:macro name="roshand" params="link_name">
 
   <link
@@ -155,7 +155,7 @@
     type="continuous">
     <origin
       xyz="0 -0.02849 0.092"
-      rpy="-1.5708 0 1.5708" />
+      rpy="-1.5708 4.1878 1.5708" />
     <parent
       link="${link_name}" />
     <child
@@ -323,7 +323,7 @@
     type="continuous">
     <origin
       xyz="0 0.02849 0.092"
-      rpy="-1.5708 0 -1.5708" />
+      rpy="-1.5708 4.1878 -1.5708" />
     <parent
       link="${link_name}" />
     <child
