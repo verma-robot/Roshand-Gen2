@@ -1,8 +1,17 @@
-float32 goal_finger_distance
+# the target distance between two fingertips , in mm 
+float32 target_finger_distance
+
+# wether use tactile sensor. if false, move fingertips to the target_finger_distance . if true, close fingertips with the sensor_threadhold and the close_step_mag
 bool use_sensor
-int16 sensor_threadhold
+
+# tactile sensor threadhold, fingertips will stop action when the value of one of the tactile sensors is higher than the sensor_threshold
+int16 sensor_threshold 
+
+# when use_sensor is true, the higher the close_step_mag, the faster the fingertips will move
 int16 close_step_mag
+
 ---
+# 
 bool finish
 ---
-Hand state
+bool state
