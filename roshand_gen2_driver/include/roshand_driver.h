@@ -25,95 +25,102 @@
 namespace roshand_gen2
 {     
    
-       typedef union
-       {
+   typedef union
+   {
 
-          unsigned char u[2];
-          int16_t f;
+      unsigned char u[2];
+      int16_t f;
 
-       }sensor_value;
+   }sensor_value;
 
-       typedef union
-       {
+   typedef union
+   {
 
-          unsigned char u[4];
-          int32_t f;
+      unsigned char u[4];
+      int32_t f;
 
-       }motor_position;
+   }motor_position;
 
-       typedef union
-       {
+   typedef union
+   {
 
-          unsigned char u[2];
-          int16_t f;
+      unsigned char u[2];
+      int16_t f;
 
-       }motor_speed;
+   }motor_speed;
 
-       class roshand_gen2_hardware
-       {
-	    public:
+    typedef union
+   {
 
+      unsigned char u[2];
+      uint16_t f;
 
-                    roshand_gen2_msgs::Hand hand_data;
-
-                    bool CALIBRATE_SENSOR_FINESHED = false;
-                    bool FingerCloseWithSensor = false;
-                    bool FingerCloseWithOutSensor = false;
-                    bool FingerOpen = false;
-
-                    bool SET_SENSOR_BIAS = false;
-                    bool SET_SENSOR_THREADHOLD = false;
-                    bool READ_DATA = false;
-
-                    std::vector<int> sensor_thread_hold[2];
-                    sensor_msgs::JointState jointstate;
-
-            public:
-
-		    roshand_gen2_hardware(void);
-                    ~roshand_gen2_hardware();   
-       		    bool init(std:: string port_name, int port_rate);
-
-                    void handle_read( char *buf, boost::system::error_code ec, std::size_t bytes_transferred );
-
-                    void read_data();
-
-                    void close_without_sensor(float target_position);
-                    void close_with_sensor(uint8_t close_step_mag);
-                    void open_gripper(void);
-
-                    void set_sensor_thread_hold();
-
-                    void set_sensor_bias(uint16_t sensor_hi);
+   }year;
 
 
+   class roshand_gen2_hardware
+   {
+	   public:
 
-                    void listen_data(uint8_t data_number, int max_seconds);
-                    void calibrate_data();
+         roshand_gen2_msgs::Hand hand_data;
 
+         bool CALIBRATE_SENSOR_FINESHED = false;
+         bool FingerCloseWithSensor = false;
+         bool FingerCloseWithOutSensor = false;
+         bool FingerOpen = false;
 
-            private:
+         bool SET_SENSOR_BIAS = false;
+         bool SET_SENSOR_THRESHOLD = false;
+         bool READ_DATA = false;
+
+         bool GET_PRODUCE_INFO = false;
+
+         uint8_t sensor_threshold;
+         sensor_msgs::JointState jointstate;
+
+         uint16_t YEAR;
+         uint8_t MONTH;
+         uint8_t DAY;
+         uint8_t NUMBER;
+
+      public:
+
+		   roshand_gen2_hardware(void);
+         ~roshand_gen2_hardware();   
+       	bool init(std:: string port_name, int port_rate);
+
+         void handle_read( char *buf, boost::system::error_code ec, std::size_t bytes_transferred );
+
+         void read_data();
+
+         void close_without_sensor(float target_position);
+         void close_with_sensor(uint8_t close_step_mag);
+         void open_gripper(void);
+
+         void set_sensor_threshold(void);
+
+         void set_sensor_bias(uint8_t sensor_hi);
+
+         void listen_data(uint8_t data_number, int max_seconds);
+         void calibrate_data();
+
+         void read_produced_info();
+
+      private:
                   
-                    ros::Time current_time, last_time;
+         ros::Time current_time, last_time;
 
+         boost::asio::serial_port *sp;
+         boost::asio::io_service iosev;
+         boost::system::error_code ec;
 
-                    boost::asio::serial_port *sp;
-                    boost::asio::io_service iosev;
-                    boost::system::error_code ec;
+         std::string port_name; 
+         int port_rate;
 
-                    std::string port_name; 
-                    int port_rate;
+         int READ_BUFFER_SIZE;
+         std::string joint_name;
 
-                    int READ_BUFFER_SIZE;
-                    std::string joint_name;
-
-
-
-
-        };
-
-
-    
+   };    
 }
 
 #endif /* SENSOR_H */
