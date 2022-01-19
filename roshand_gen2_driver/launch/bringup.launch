@@ -4,30 +4,29 @@
    <arg name="port_rate" value="115200" />
    <arg name="sensor_bias" value="10" />
    <arg name="ns" value="/" />
+   <arg name="sensor_threshold" value="20" />
 
 
-   <arg name="dir" value="$(find roshand_gen2_driver)/yaml/threadhold.yaml" />
 
    <node pkg="roshand_gen2_driver" type="roshand_gen2_bringup" name="roshand_gen2_bringup" output="screen" required="true" cwd="node" >
       <param name="port_name" value="$(arg port_name)" />  
       <param name="port_rate" value="$(arg port_rate)" />
       <param name="ns" value="$(arg ns)" />
       <param name="sensor_bias" value="$(arg sensor_bias)" />
-      <rosparam file="$(find roshand_gen2_driver)/yaml/threadhold.yaml" command="load"  />
-   
-   </node>     
-	
+      <param name="sensor_threshold" value="$(arg sensor_threshold)" />
 
-   <param name="robot_description" command="$(find xacro)/xacro.py '$(find roshand_gen2_visualizer)/urdf/roshand_gen2_description_alone.xacro'  --inorder robot_namespace:=$(arg ns)" />
+   </node>     
+
+   <include file="$(find roshand_gen2_visualizer)/launch/display.launch" />
+
    <node name = "roshand_state_publisher"   pkg="robot_state_publisher"    type="robot_state_publisher">
       <remap from="joint_states" to="$(arg ns)RosHand_JointState"/>
    </node>
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 
   <node name="sensor_marker" pkg="roshand_gen2_driver" type="sensor_marker" >
       <param name="ns" value="$(arg ns)" />
 
   </node>
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find roshand_gen2_driver)/config/model.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find roshand_gen2_visualizer)/config/roshand_gen2.rviz" />
 
 </launch>
