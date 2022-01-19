@@ -27,6 +27,6 @@
       <param name="ns" value="$(arg ns)" />
 
   </node>
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find roshand_gen2_visualizer)/config/roshand_gen2.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find roshand_gen2_visualizer)/roshand_gen2.rviz" />
 
 </launch>
